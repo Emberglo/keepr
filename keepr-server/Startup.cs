@@ -67,8 +67,8 @@ namespace keepr_server
             services.AddScoped<IDbConnection>(x => CreateDbConnection());
             services.AddTransient<ProfilesService>();
             services.AddTransient<ProfilesRepository>();
-            // services.AddTransient<ItemsService>();
-            // services.AddTransient<ItemsRepository>();
+            services.AddTransient<KeepsService>();
+            services.AddTransient<KeepsRepository>();
             // services.AddTransient<ListsService>();
             // services.AddTransient<ListsRepository>();
             // services.AddTransient<ListItemsService>();
