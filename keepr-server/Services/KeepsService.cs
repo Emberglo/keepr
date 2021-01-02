@@ -18,6 +18,11 @@ namespace keepr_server.Services
             return _repo.Get();
         }
 
+        public Keep GetKeepById(int id)
+        {
+            return _repo.GetKeepById(id);
+        }
+
         public Keep Create(Keep newKeep)
         {
             newKeep.Id = _repo.Create(newKeep);

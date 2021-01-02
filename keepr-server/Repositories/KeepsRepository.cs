@@ -22,6 +22,12 @@ namespace keepr_server.Repositories
             return _db.Query<Keep, Profile, Keep>(sql, (keep, profile) => { keep.Creator = profile; return keep; }, splitOn: "id");
         }
 
+        public Keep GetKeepById(int id)
+        {
+            Keep selectedKeep = this.GetOne(id);
+            return selectedKeep;
+        }
+
         internal Keep GetOne(int id)
         {
             string sql = "SELECT * FROM keeps WHERE id = @id";
