@@ -5,7 +5,7 @@ import { api } from './AxiosService'
 class ProfileService {
   async getProfile() {
     try {
-      const res = await api.get('/profile')
+      const res = await api.get('api/profiles')
       AppState.profile = res.data
     } catch (err) {
       logger.error('Get Profile - HAVE YOU STARTED YOUR SERVER YET???', err)

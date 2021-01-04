@@ -28,6 +28,12 @@ namespace keepr_server.Repositories
             return selectedKeep;
         }
 
+        public IEnumerable<Keep> GetKeepsByProfile(string profileId)
+        {
+            string sql = "SELECT keep.*, p.* FROM keeps keep JOIN profiles p ON keep.creatorId = p.id WHERE keep.creatorId = @profileId;";
+            return _db.Query<Keep, Profile, Keep>(sql, (keep, profile) => { keep.Creator = profile; return keep; }, new { profileId }, splitOn: "id");
+        }
+
         internal Keep GetOne(int id)
         {
             string sql = "SELECT * FROM keeps WHERE id = @id";
@@ -43,14 +49,14 @@ namespace keepr_server.Repositories
 
         internal void Edit(Keep editedKeep)
         {
-            string sql = "UPDATE keeps SET views = @Views, shares = @Shares, keeps = @keeps WHERE id = @Id;";
+            string sql = "UPDATE keeps SET name = @Name, description = @Description, img = @Img, views = @Views, shares = @Shares, keeps = @Keeps WHERE id = @Id;";
             _db.Execute(sql, editedKeep);
         }
 
-        internal bool Delete(int keepId)
+        internal bool Delete(int id)
         {
-            string sql = "DELETE FROM keeps WHERE keepId = @id";
-            int valid = _db.Execute(sql, new { keepId });
+            string sql = "DELETE FROM keeps WHERE id = @id";
+            int valid = _db.Execute(sql, new { id });
             return valid > 0;
         }
     }

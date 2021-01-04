@@ -17,6 +17,7 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
 using MySqlConnector;
+using vaultr_server.Repositories;
 
 namespace keepr_server
 {
@@ -69,10 +70,10 @@ namespace keepr_server
             services.AddTransient<ProfilesRepository>();
             services.AddTransient<KeepsService>();
             services.AddTransient<KeepsRepository>();
-            // services.AddTransient<ListsService>();
-            // services.AddTransient<ListsRepository>();
-            // services.AddTransient<ListItemsService>();
-            // services.AddTransient<ListItemsRepository>();
+            services.AddTransient<VaultsService>();
+            services.AddTransient<VaultsRepository>();
+            services.AddTransient<VaultKeepsService>();
+            services.AddTransient<VaultKeepsRepository>();
         }
 
 

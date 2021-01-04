@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using keepr_server.Models;
 using keepr_server.Repositories;
 
@@ -23,6 +24,11 @@ namespace keepr_server.Services
             return _repo.GetKeepById(id);
         }
 
+        public IEnumerable<Keep> GetKeepsByProfile(string profileId, string userId)
+        {
+            return _repo.GetKeepsByProfile(profileId).ToList().FindAll(k => k.CreatorId == userId);
+        }
+
         public Keep Create(Keep newKeep)
         {
             newKeep.Id = _repo.Create(newKeep);
@@ -41,15 +47,15 @@ namespace keepr_server.Services
             return _repo.GetOne(editedKeep.Id);
         }
 
-        internal string Delete(int keepId, string userId)
+        internal string Delete(int id, string userId)
         {
-            Keep selectedKeep = _repo.GetOne(keepId);
+            Keep selectedKeep = _repo.GetOne(id);
             if (selectedKeep == null) { throw new Exception("Incorrect ID"); }
             if (selectedKeep.CreatorId != userId)
             {
                 throw new Exception("Not Your Keep");
             }
-            if (_repo.Delete(keepId))
+            if (_repo.Delete(id))
             {
                 return "Great Success";
             }

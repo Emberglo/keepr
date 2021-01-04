@@ -4,7 +4,7 @@
       <div class="d-flex flex-column align-items-center">
         <img
           alt="logo"
-          src="../assets/img/cw-logo.png"
+          src="../assets/img/k_logo.png"
           height="45"
         />
       </div>
@@ -103,6 +103,9 @@ export default {
 </script>
 
 <style scoped>
+nav {
+  max-height: 9vh;
+}
 .dropdown-menu {
   user-select: none;
   display: block;
