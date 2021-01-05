@@ -1,8 +1,8 @@
 <template>
   <div class="ActiveKeepComponent container-fluid">
-    <div class="row justify-content-center align-items-center">
+    <div class="row justify-content-center align-items-center w-100">
       <div class="col-12 col-md-6">
-        <img :src="activeKeep.img" alt="keepImg">
+        <img :src="activeKeep.img" alt="keepImg" class="img-fluid">
       </div>
       <div class="col-12 col-md-6">
         <div class="row justify-content-end">

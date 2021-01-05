@@ -40,17 +40,32 @@
             <button type="button" class="btn-close bg-danger" data-bs-dismiss="modal" aria-label="Close"></button>
           </div>
           <div class="modal-body">
-            <form>
+            <form @submit.prevent="createVault">
               <div class="mb-3">
-                <label for="title" class="form-label">Title</label>
-                <input type="text" class="form-control" id="title" aria-describedby="vaultTitle" placeholder="Title...">
+                <label for="vaultTitle" class="form-label">Title</label>
+                <input type="text"
+                       class="form-control"
+                       id="vaultTitle"
+                       aria-describedby="vaultTitle"
+                       placeholder="Title..."
+                       v-model="state.newVault.name"
+                >
               </div>
               <div class="mb-3">
-                <label for="imgUrl" class="form-label">Image URL</label>
-                <input type="text" class="form-control" id="imgUrl" placeholder="URL...">
+                <label for="vaultDescription" class="form-label">Description</label>
+                <input type="text"
+                       class="form-control"
+                       id="vaultDescription"
+                       placeholder="Description..."
+                       v-model="state.newVault.description"
+                >
               </div>
               <div class="mb-3 form-check">
-                <input type="checkbox" class="form-check-input" id="privateVault">
+                <input type="checkbox"
+                       class="form-check-input"
+                       id="privateVault"
+                       v-model="state.newVault.isPrivate"
+                >
                 <label class="form-check-label" for="privateVault">Private Vault?</label>
                 <div id="privateVaultHelp" class="form-text seeThrough">
                   Private vaults can only be seen by you.
@@ -78,26 +93,48 @@
             <button type="button" class="btn-close bg-danger" data-bs-dismiss="modal" aria-label="Close"></button>
           </div>
           <div class="modal-body">
-            <form>
+            <form @submit.prevent="createKeep">
               <div class="mb-3">
-                <label for="title" class="form-label">Title</label>
-                <input type="text" class="form-control" id="title" aria-describedby="vaultTitle" placeholder="Title...">
+                <label for="keepTitle" class="form-label">Title</label>
+                <input type="text"
+                       class="form-control"
+                       id="keepTitle"
+                       aria-describedby="vaultTitle"
+                       placeholder="Title..."
+                       v-model="state.newKeep.name"
+                >
               </div>
               <div class="mb-3">
                 <label for="imgUrl" class="form-label">Image URL</label>
-                <input type="text" class="form-control" id="imgUrl" placeholder="URL...">
+                <input type="text"
+                       class="form-control"
+                       id="imgUrl"
+                       placeholder="URL..."
+                       v-model="state.newKeep.img"
+                >
               </div>
               <div class="mb-3">
-                <label for="description" class="form-label">Description</label>
-                <input type="textarea" class="form-control" id="description" aria-describedby="vaultTitle" placeholder="Description...">
+                <label for="keepDescription" class="form-label">Description</label>
+                <input type="textarea"
+                       class="form-control"
+                       id="keepDescription"
+                       aria-describedby="vaultTitle"
+                       placeholder="Description..."
+                       v-model="state.newKeep.description"
+                >
               </div>
-              <div class="mb-3">
+              <!-- <div class="mb-3">
                 <label for="tags" class="form-label">Tags</label>
-                <input type="text" class="form-control" id="tags" placeholder="Tags...">
+                <input type="text"
+                       class="form-control"
+                       id="tags"
+                       placeholder="Tags..."
+                       v-model="state.newKeep.tags"
+                >
                 <div id="tagsHelp" class="form-text seeThrough">
                   Seperate tags with a comma
                 </div>
-              </div>
+              </div> -->
               <div class="w-100 d-flex justify-content-end align-items-center">
                 <button type="submit" class="btn btn-primary">
                   Create
@@ -114,7 +151,6 @@
 <script>
 import { computed, onMounted, reactive } from 'vue'
 import { AppState } from '../AppState'
-import { useRoute } from 'vue-router'
 import { profileService } from '../services/ProfileService'
 import { vaultsService } from '../services/VaultsService'
 import { keepsService } from '../services/KeepsService'
@@ -125,18 +161,25 @@ export default {
       newKeep: {},
       newVault: {}
     })
-    const route = useRoute()
     onMounted(async() => {
-      await profileService.getOtherProfile(route.params.profileId)
-      await vaultsService.getVaults(route.params.profileId)
-      await keepsService.getProfileKeeps(route.params.profileId)
+      await profileService.getOtherProfile(AppState.profile.id)
+      await vaultsService.getVaults(AppState.profile.id)
+      await keepsService.getProfileKeeps(AppState.profile.id)
     })
     return {
       state,
       profile: computed(() => AppState.profile),
       otherProfile: computed(() => AppState.otherProfile),
       vaults: computed(() => AppState.vaults),
-      profileKeeps: computed(() => AppState.profileKeeps)
+      profileKeeps: computed(() => AppState.profileKeeps),
+      async createVault() {
+        await vaultsService.createVault(state.newVault, this.profile.id)
+        state.newVault = {}
+      },
+      async createKeep() {
+        await keepsService.createKeep(state.newKeep, this.profile.id)
+        state.newKeep = {}
+      }
     }
   }
 }

@@ -31,6 +31,24 @@ class KeepsService {
       logger.error('Get Vaults - HAVE YOU STARTED YOUR SERVER YET???', err)
     }
   }
+
+  async createKeep(newKeep, profileId) {
+    try {
+      await api.post('api/keeps', newKeep)
+      this.getProfileKeeps(profileId)
+    } catch (err) {
+      logger.error(err)
+    }
+  }
+
+  async deleteKeep(keepId, profileId) {
+    try {
+      await api.delete('api/keeps/' + keepId)
+      this.getProfileKeeps(profileId)
+    } catch (err) {
+      logger.error(err)
+    }
+  }
 }
 
 export const keepsService = new KeepsService()
