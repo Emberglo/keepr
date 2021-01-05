@@ -20,7 +20,7 @@ import { vaultsService } from '../services/VaultsService'
 export default {
   name: 'VaultPage',
   setup() {
-    const route = useRoute();
+    const route = useRoute()
     onMounted(async() => {
       await vaultsService.getActiveVault(route.params.vaultId)
     })

@@ -12,8 +12,50 @@
     </div>
     <div class="modal fade" id="keepModal" tabindex="-1" aria-labelledby="keepModalLabel" aria-hidden="true">
       <div class="modal-dialog modal-xl p-5">
-        <div class="modal-content p-5">
-          <active-keep-component />
+        <div class="modal-content container-fluid p-5">
+          <div class="row justify-content-center align-items-center w-100">
+            <div class="col-12 col-md-6">
+              <img :src="keep.img" alt="keepImg" class="img-fluid">
+            </div>
+            <div class="col-12 col-md-6">
+              <div class="row justify-content-end">
+                <i type="button" class="fas fa-minus text-danger mr-4 p-3" data-bs-dismiss="modal" aria-label="Close"></i>
+              </div>
+              <div class="row justify-content-center mb-1">
+                <i class="far fa-eye"></i>
+                <i class="fab fa-kaggle mx-4"></i>
+                <i class="fas fa-share-alt"></i>
+              </div>
+              <div class="row justify-content-center mb-3">
+                <p>{{ keep.views }}</p>
+                <p class="mx-4">{{ keep.keeps }}</p>
+                <p>{{ keep.shares }}</p>
+              </div>
+              <div class="row mb-3">
+                <div class="col-12">
+                  <h3 class="mb-3">{{ keep.name }}</h3>
+                  <p>{{ keep.description }}</p>
+                </div>
+              </div>
+              <hr class="w-75">
+              <div class="row mb-3">
+                <div class="col-12">
+                  <p>keep tags</p>
+                </div>
+              </div>
+              <div class="row justify-content-around align-items-center">
+                <div class="col-6">
+                  <button class="btn btn-outline-primary">
+                    Add To Vault
+                  </button>
+                </div>
+                <div class="col-6 d-flex align-items-center">
+                  <img :src="keepProp.creator.picture" alt="Profile Image" class="icon rounded-circle p-0 m-0 mr-2">
+                  <p class="mb-0">{{ keepProp.creator.name }}</p>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </div>
