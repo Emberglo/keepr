@@ -21,5 +21,10 @@ namespace keepr_server.Services
             }
             return foundProfile;
         }
+
+        internal Profile GetOtherProfile(string profileId)
+        {
+            return _repo.GetOtherProfile(profileId);
+        }
     }
 }

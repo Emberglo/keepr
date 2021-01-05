@@ -37,6 +37,19 @@ namespace keepr_server.Controllers
             }
         }
 
+        [HttpGet("{profileId}")]
+        public ActionResult<Profile> GetOtherProfile(string profileId)
+        {
+            try
+            {
+                return Ok(_ps.GetOtherProfile(profileId));
+            }
+            catch (Exception err)
+            {
+                return BadRequest(err.Message);
+            }
+        }
+
         [HttpGet("{id}/keeps")]
         public async Task<ActionResult<Profile>> GetKeepsByProfile(string id)
         {

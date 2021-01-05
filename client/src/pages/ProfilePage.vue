@@ -11,16 +11,22 @@
       </div>
     </div>
     <div class="row mt-3 align-items-center">
-      <h2 class="ml-3 p-3">Vaults</h2>
-      <i class="fas fa-plus text-dark" type="button"  data-bs-toggle="modal" data-bs-target="#vaultsModal"></i>
+      <h2 class="ml-3 p-3">
+        Vaults
+      </h2>
+      <i class="fas fa-plus text-dark" type="button" data-bs-toggle="modal" data-bs-target="#vaultsModal"></i>
     </div>
     <div class="row">
+      <vault-component v-for="vault in vaults" :vault-prop="vault" :key="vault.id" class="p-3" />
     </div>
     <div class="row mt-3 align-items-center">
-      <h2 class="ml-3 p-3">Keeps</h2>
+      <h2 class="ml-3 p-3">
+        Keeps
+      </h2>
       <i class="fas fa-plus text-dark" type="button" data-bs-toggle="modal" data-bs-target="#keepsModal"></i>
     </div>
     <div class="row">
+      <profile-keep-component v-for="profileKeep in profileKeeps" :profile-keep-prop="profileKeep" :key="profileKeep.id" class="p-3" />
     </div>
 
     <!-- Modal -->
@@ -28,7 +34,9 @@
       <div class="modal-dialog">
         <div class="modal-content border border-primary">
           <div class="modal-header">
-            <h5 class="modal-title" id="vaultsModalLabel">New Vault</h5>
+            <h5 class="modal-title" id="vaultsModalLabel">
+              New Vault
+            </h5>
             <button type="button" class="btn-close bg-danger" data-bs-dismiss="modal" aria-label="Close"></button>
           </div>
           <div class="modal-body">
@@ -44,9 +52,15 @@
               <div class="mb-3 form-check">
                 <input type="checkbox" class="form-check-input" id="privateVault">
                 <label class="form-check-label" for="privateVault">Private Vault?</label>
-                <div id="privateVault" class="form-text">Private vaults can only be seen by you.</div>
+                <div id="privateVaultHelp" class="form-text seeThrough">
+                  Private vaults can only be seen by you.
+                </div>
               </div>
-              <button type="submit" class="btn btn-primary">Create</button>
+              <div class="w-100 d-flex justify-content-end align-items-center">
+                <button type="submit" class="btn btn-primary">
+                  Create
+                </button>
+              </div>
             </form>
           </div>
         </div>
@@ -58,7 +72,9 @@
       <div class="modal-dialog">
         <div class="modal-content border border-primary">
           <div class="modal-header">
-            <h5 class="modal-title" id="keepsModalLabel">New Keep</h5>
+            <h5 class="modal-title" id="keepsModalLabel">
+              New Keep
+            </h5>
             <button type="button" class="btn-close bg-danger" data-bs-dismiss="modal" aria-label="Close"></button>
           </div>
           <div class="modal-body">
@@ -78,9 +94,15 @@
               <div class="mb-3">
                 <label for="tags" class="form-label">Tags</label>
                 <input type="text" class="form-control" id="tags" placeholder="Tags...">
-                <div id="tags" class="form-text">Seperate tags with a comma</div>
+                <div id="tagsHelp" class="form-text seeThrough">
+                  Seperate tags with a comma
+                </div>
               </div>
-              <button type="submit" class="btn btn-primary">Create</button>
+              <div class="w-100 d-flex justify-content-end align-items-center">
+                <button type="submit" class="btn btn-primary">
+                  Create
+                </button>
+              </div>
             </form>
           </div>
         </div>
@@ -90,13 +112,31 @@
 </template>
 
 <script>
-import { computed } from 'vue'
+import { computed, onMounted, reactive } from 'vue'
 import { AppState } from '../AppState'
+import { useRoute } from 'vue-router'
+import { profileService } from '../services/ProfileService'
+import { vaultsService } from '../services/VaultsService'
+import { keepsService } from '../services/KeepsService'
 export default {
   name: 'Profile',
   setup() {
+    const state = reactive({
+      newKeep: {},
+      newVault: {}
+    })
+    const route = useRoute()
+    onMounted(async() => {
+      await profileService.getOtherProfile(route.params.profileId)
+      await vaultsService.getVaults(route.params.profileId)
+      await keepsService.getProfileKeeps(route.params.profileId)
+    })
     return {
-      profile: computed(() => AppState.profile)
+      state,
+      profile: computed(() => AppState.profile),
+      otherProfile: computed(() => AppState.otherProfile),
+      vaults: computed(() => AppState.vaults),
+      profileKeeps: computed(() => AppState.profileKeeps)
     }
   }
 }
@@ -106,5 +146,8 @@ export default {
 img {
   max-width: 350px;
   border-radius: 15px;
+}
+.seeThrough {
+  opacity: 0.7;
 }
 </style>

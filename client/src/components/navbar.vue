@@ -42,7 +42,7 @@
           Login
         </button>
 
-        <div class="dropdown" v-else>
+        <div class="dropdown cursor-pointer" v-else>
           <div
             class="dropdown-toggle"
             @click="state.dropOpen = !state.dropOpen"
@@ -69,7 +69,7 @@
               class="list-group-item list-group-item-action hoverable"
               @click="logout"
             >
-              logout
+              Logout
             </div>
           </div>
         </div>

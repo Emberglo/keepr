@@ -19,6 +19,12 @@ namespace keepr_server.Repositories
             return _db.QueryFirstOrDefault<Profile>(sql, new { email });
         }
 
+        public Profile GetOtherProfile(string profileId)
+        {
+            string sql = "SELECT * FROM profiles WHERE id = @profileId";
+            return _db.QueryFirstOrDefault<Profile>(sql, new { profileId });
+        }
+
         public Profile Create(Profile userInfo)
         {
             string sql = "INSERT INTO profiles (name, picture, email, id) VALUES (@Name, @Picture, @Email, @Id)";

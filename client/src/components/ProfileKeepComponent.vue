@@ -1,12 +1,12 @@
 <template>
-  <div class="KeepComponent col-6 col-sm-3 p-2">
-    <div class="keep container-fluid p-2 h-100 d-flex flex-column justify-content-end shadow-sm border border-primary" :style="{ backgroundImage: `url(${keepProp.img})` }">
+  <div class="ProfileKeepComponent col-6 col-sm-3 p-2">
+    <div class="keep container-fluid p-2 h-100 d-flex flex-column justify-content-end shadow-sm border border-primary" :style="{ backgroundImage: `url(${profileKeepProp.img})` }">
       <div class="row align-items-end">
         <div class="col-8 text-left cursor-pointer">
-          <p class="mb-0 font-weight-bold" data-bs-toggle="modal" data-bs-target="#keepModal" @click="getActiveKeep(keep.id)">{{ keepProp.name }}</p>
+          <p class="mb-0 font-weight-bold" data-bs-toggle="modal" data-bs-target="#keepModal" @click="getActiveKeep(keep.id)">{{ profileKeepProp.name }}</p>
         </div>
         <div class="col-4 text-right cursor-pointer">
-          <img :src="keepProp.creator.picture" alt="Profile Image" class="icon rounded-circle p-0 m-0" @click="getOtherProfile(keepProp.creatorId)">
+          <img :src="profileKeepProp.creator.picture" alt="Profile Image" class="icon rounded-circle p-0 m-0" @click="getOtherProfile(profileKeepProp.creatorId)">
         </div>
       </div>
     </div>
@@ -25,14 +25,14 @@ import { computed } from 'vue'
 import { AppState } from '../AppState'
 import { useRouter } from 'vue-router'
 export default {
-  name: 'KeepComponent',
+  name: 'ProfileKeepComponent',
   props: {
-    keepProp: Object
+    profileKeepProp: Object
   },
   setup(props) {
     const router = useRouter()
     return {
-      keep: computed(() => props.keepProp),
+      keep: computed(() => props.profileKeepProp),
       profile: computed(() => AppState.profile),
       getActiveKeep(keepId) {
         const index = AppState.keeps.findIndex(k => k.id === keepId)

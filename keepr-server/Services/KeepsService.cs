@@ -26,7 +26,8 @@ namespace keepr_server.Services
 
         public IEnumerable<Keep> GetKeepsByProfile(string profileId, string userId)
         {
-            return _repo.GetKeepsByProfile(profileId).ToList().FindAll(k => k.CreatorId == userId);
+            // return _repo.GetKeepsByProfile(profileId).ToList().FindAll(k => k.CreatorId == userId); CHANGED TO PROFILEID
+            return _repo.GetKeepsByProfile(profileId).ToList().FindAll(k => k.CreatorId == profileId);
         }
 
         public Keep Create(Keep newKeep)
