@@ -45,9 +45,16 @@
               </div>
               <div class="row justify-content-around align-items-center">
                 <div class="col-6">
-                  <button class="btn btn-outline-primary">
-                    Add To Vault
-                  </button>
+                  <form @submit.prevent="addToVault(keep.id)" class="row flex-column">
+                    <select name="VaultId" id="VaultId" v-model="state.newVaultKeep.VaultId">
+                      <option v-for="vault in vaults" :key="vault.id" :value="vault.id">
+                        {{ vault.name }}
+                      </option>
+                    </select>
+                    <button type="submit" class="btn btn-outline-primary">
+                      Add To Vault
+                    </button>
+                  </form>
                 </div>
                 <div class="col-6 d-flex align-items-center">
                   <img :src="keepProp.creator.picture" alt="Profile Image" class="icon rounded-circle p-0 m-0 mr-2">
@@ -63,25 +70,40 @@
 </template>
 
 <script>
-import { computed } from 'vue'
+import { computed, onMounted, reactive } from 'vue'
 import { AppState } from '../AppState'
 import { useRouter } from 'vue-router'
+import { vaultsService } from '../services/VaultsService'
+// import { profileService } from '../services/ProfileService'
 export default {
   name: 'KeepComponent',
   props: {
     keepProp: Object
   },
   setup(props) {
+    onMounted(async() => {
+      // await vaultsService.getVaults()
+    })
+    const state = reactive({
+      newVaultKeep: {}
+    })
     const router = useRouter()
     return {
+      state,
       keep: computed(() => props.keepProp),
       profile: computed(() => AppState.profile),
+      vaults: computed(() => AppState.vaults),
       getActiveKeep(keepId) {
         const index = AppState.keeps.findIndex(k => k.id === keepId)
         AppState.activeKeep = AppState.keeps[index]
+        vaultsService.getVaults(AppState.profile.id)
       },
       getOtherProfile(creatorId) {
         router.push({ name: 'OtherProfilePage', params: { profileId: creatorId } })
+      },
+      addToVault(keepId) {
+        state.newVaultKeep.KeepId = keepId
+        vaultsService.addToVault(state.newVaultKeep)
       }
     }
   }

@@ -34,6 +34,11 @@ class VaultsService {
       logger.error(err)
     }
   }
+
+  async addToVault(newVaultKeep) {
+    debugger
+    await api.post('api/vaultkeeps', newVaultKeep)
+  }
 }
 
 export const vaultsService = new VaultsService()

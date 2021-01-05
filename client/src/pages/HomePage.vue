@@ -10,14 +10,18 @@
 import { computed, onMounted } from 'vue'
 import { AppState } from '../AppState'
 import { keepsService } from '../services/KeepsService'
+import { vaultsService } from '../services/VaultsService'
 export default {
   name: 'Home',
   setup() {
     onMounted(async() => {
       await keepsService.getAllKeeps()
+      await vaultsService.getVaults(AppState.profile.id)
     })
     return {
-      keeps: computed(() => AppState.keeps)
+      keeps: computed(() => AppState.keeps),
+      profile: computed(() => AppState.profile),
+      vaults: computed(() => AppState.vaults)
     }
   }
 }
