@@ -8,6 +8,7 @@
     </div>
     <hr class="w-100">
     <div class="row">
+      <vault-keep-component v-for="vaultKeep in vaultKeeps" :vault-keep-prop="vaultKeep" :key="vaultKeep.id" />
     </div>
   </div>
 </template>
@@ -23,10 +24,12 @@ export default {
     const route = useRoute()
     onMounted(async() => {
       await vaultsService.getActiveVault(route.params.vaultId)
+      await vaultsService.getVaultKeeps(route.params.vaultId)
     })
     return {
       profile: computed(() => AppState.profile),
-      vault: computed(() => AppState.activeVault)
+      vault: computed(() => AppState.activeVault),
+      vaultKeeps: computed(() => AppState.vaultKeeps)
     }
   }
 }

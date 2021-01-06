@@ -3,14 +3,14 @@
     <div class="keep container-fluid p-2 h-100 d-flex flex-column justify-content-end shadow-sm border border-primary" :style="{ backgroundImage: `url(${keepProp.img})` }">
       <div class="row align-items-end">
         <div class="col-8 text-left cursor-pointer">
-          <p class="mb-0 font-weight-bold" data-bs-toggle="modal" data-bs-target="#keepModal" @click="getActiveKeep(keep.id)">{{ keepProp.name }}</p>
+          <p class="mb-0 font-weight-bold" data-bs-toggle="modal" :data-bs-target="'#keepModal'+keep.id" @click="getActiveKeep(keep.id)">{{ keepProp.name }}</p>
         </div>
         <div class="col-4 text-right cursor-pointer">
           <img :src="keepProp.creator.picture" alt="Profile Image" class="icon rounded-circle p-0 m-0" @click="getOtherProfile(keepProp.creatorId)">
         </div>
       </div>
     </div>
-    <div class="modal fade" id="keepModal" tabindex="-1" aria-labelledby="keepModalLabel" aria-hidden="true">
+    <div class="modal fade" :id="'keepModal'+keep.id" tabindex="-1" aria-labelledby="keepModalLabel" aria-hidden="true">
       <div class="modal-dialog modal-xl p-5">
         <div class="modal-content container-fluid p-5">
           <div class="row justify-content-center align-items-center w-100">

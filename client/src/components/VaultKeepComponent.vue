@@ -1,15 +1,15 @@
 <template>
-  <div class="ProfileKeepComponent col-6 col-sm-3 p-2">
-    <div class="keep container-fluid p-2 h-100 d-flex flex-column justify-content-between shadow-sm border border-primary" :style="{ backgroundImage: `url(${profileKeepProp.img})` }">
+  <div class="VaultKeepComponent col-6 col-sm-3 p-2">
+    <div class="keep container-fluid p-2 h-100 d-flex flex-column justify-content-between shadow-sm border border-primary" :style="{ backgroundImage: `url(${vaultKeepProp.img})` }">
       <div class="row align-self-start justify-content-end w-100">
-        <i type="button" class="fas fa-minus text-danger cursor-pointer" v-if="profile.id == profileKeepProp.creatorId" @click="deleteKeep"></i>
+        <i type="button" class="fas fa-minus text-danger cursor-pointer" @click="deleteVaultKeep(keep.vaultKeepId)"></i>
       </div>
       <div class="row align-items-end">
         <div class="col-8 text-left cursor-pointer">
-          <p class="mb-0 font-weight-bold" data-bs-toggle="modal" :data-bs-target="'#keepModal'+keep.id" @click="getActiveKeep(keep.id)">{{ profileKeepProp.name }}</p>
+          <p class="mb-0 font-weight-bold" data-bs-toggle="modal" :data-bs-target="'#keepModal'+keep.id" @click="getActiveKeep(keep.id)">{{ vaultKeepProp.name }}</p>
         </div>
         <div class="col-4 text-right cursor-pointer">
-          <img :src="profileKeepProp.creator.picture" alt="Profile Image" class="icon rounded-circle p-0 m-0" @click="getOtherProfile(profileKeepProp.creatorId)">
+          <img :src="vaultKeepProp.creator.picture" alt="Profile Image" class="icon rounded-circle p-0 m-0" @click="getOtherProfile(vaultKeepProp.creatorId)">
         </div>
       </div>
     </div>
@@ -48,11 +48,20 @@
               </div>
               <div class="row justify-content-around align-items-center">
                 <div class="col-6">
-                  <button class="btn btn-outline-primary">Add To Vault</button>
+                  <form @submit.prevent="addToVault(keep.id)" class="row flex-column">
+                    <select name="VaultId" id="VaultId" v-model="state.newVaultKeep.VaultId">
+                      <option v-for="vault in vaults" :key="vault.id" :value="vault.id">
+                        {{ vault.name }}
+                      </option>
+                    </select>
+                    <button type="submit" class="btn btn-outline-primary">
+                      Add To Vault
+                    </button>
+                  </form>
                 </div>
                 <div class="col-6 d-flex align-items-center">
-                  <img :src="profileKeepProp.creator.picture" alt="Profile Image" class="icon rounded-circle p-0 m-0 mr-2">
-                  <p class="mb-0">{{ profileKeepProp.creator.name }}</p>
+                  <img :src="vaultKeepProp.creator.picture" alt="Profile Image" class="icon rounded-circle p-0 m-0 mr-2">
+                  <p class="mb-0">{{ vaultKeepProp.creator.name }}</p>
                 </div>
               </div>
             </div>
@@ -64,29 +73,42 @@
 </template>
 
 <script>
-import { computed } from 'vue'
+import { computed, onMounted, reactive } from 'vue'
 import { AppState } from '../AppState'
-import { useRouter } from 'vue-router'
-import { keepsService } from '../services/KeepsService'
+import { useRouter, useRoute } from 'vue-router'
+import { vaultsService } from '../services/VaultsService'
 export default {
-  name: 'ProfileKeepComponent',
+  name: 'VaultKeepComponent',
   props: {
-    profileKeepProp: Object
+    vaultKeepProp: Object
   },
   setup(props) {
+    onMounted(async() => {
+    })
+    const state = reactive({
+      newVaultKeep: {}
+    })
     const router = useRouter()
+    const route = useRoute()
     return {
-      keep: computed(() => props.profileKeepProp),
+      state,
+      keep: computed(() => props.vaultKeepProp),
       profile: computed(() => AppState.profile),
+      vaults: computed(() => AppState.vaults),
       getActiveKeep(keepId) {
         const index = AppState.keeps.findIndex(k => k.id === keepId)
         AppState.activeKeep = AppState.keeps[index]
+        vaultsService.getVaults(AppState.profile.id)
       },
       getOtherProfile(creatorId) {
         router.push({ name: 'OtherProfilePage', params: { profileId: creatorId } })
       },
-      deleteKeep() {
-        keepsService.deleteKeep(this.keep.id, this.profile.id)
+      addToVault(keepId) {
+        state.newVaultKeep.KeepId = keepId
+        vaultsService.addToVault(state.newVaultKeep)
+      },
+      deleteVaultKeep(vaultKeepId) {
+        vaultsService.deleteVaultKeep(vaultKeepId, route.params.vaultId)
       }
     }
   }

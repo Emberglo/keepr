@@ -36,8 +36,17 @@ class VaultsService {
   }
 
   async addToVault(newVaultKeep) {
-    debugger
     await api.post('api/vaultkeeps', newVaultKeep)
+  }
+
+  async getVaultKeeps(vaultId) {
+    const res = await api.get('/api/vaults/' + vaultId + '/keeps')
+    AppState.vaultKeeps = res.data
+  }
+
+  async deleteVaultKeep(vaultKeepId, vaultId) {
+    await api.delete('/api/vaultkeeps/' + vaultKeepId)
+    this.getVaultKeeps(vaultId)
   }
 }
 
