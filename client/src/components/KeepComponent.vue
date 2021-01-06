@@ -1,6 +1,16 @@
 <template>
-  <div class="KeepComponent col-6 col-sm-3 p-2">
-    <div class="keep container-fluid p-2 h-100 d-flex flex-column justify-content-end shadow-sm border border-primary" :style="{ backgroundImage: `url(${keepProp.img})` }">
+  <div class="KeepComponent card">
+    <img class="card-img" :src="keepProp.img" alt="Card image">
+    <div class="card-img-overlay container-fluid d-flex flex-column justify-content-between h-100">
+      <div class="row w-100 justify-content-end">
+        <i type="button" class="fas fa-minus text-danger cursor-pointer" v-if="profile.id == keepProp.creatorId" @click="deleteKeep"></i>
+      </div>
+      <div class="row w-100 justify-content-between">
+        <h5 class="mb-0 cursor-pointer" data-bs-toggle="modal" :data-bs-target="'#keepModal'+keep.id"  @click="getActiveKee(keep.id)">{{ keepProp.name }}</h5>
+        <img :src="keepProp.creator.picture" alt="Profile Image" class="icon rounded-circle p-0 m-0 cursor-pointer"  @click="getOtherProfile(keepProp.creatorId)">
+      </div>
+    </div>
+    <!-- <div class="keep container-fluid p-2 h-100 d-flex flex-column justify-content-end shadow-sm border border-primary" :style="{ backgroundImage: `url(${keepProp.img})` }">
       <div class="row align-items-end">
         <div class="col-8 text-left cursor-pointer">
           <p class="mb-0 font-weight-bold" data-bs-toggle="modal" :data-bs-target="'#keepModal'+keep.id" @click="getActiveKeep(keep.id)">{{ keepProp.name }}</p>
@@ -9,7 +19,7 @@
           <img :src="keepProp.creator.picture" alt="Profile Image" class="icon rounded-circle p-0 m-0" @click="getOtherProfile(keepProp.creatorId)">
         </div>
       </div>
-    </div>
+    </div> -->
     <div class="modal fade" :id="'keepModal'+keep.id" tabindex="-1" aria-labelledby="keepModalLabel" aria-hidden="true">
       <div class="modal-dialog modal-xl p-5">
         <div class="modal-content container-fluid p-5">
@@ -74,6 +84,7 @@ import { computed, onMounted, reactive } from 'vue'
 import { AppState } from '../AppState'
 import { useRouter } from 'vue-router'
 import { vaultsService } from '../services/VaultsService'
+import { keepsService } from '../services/KeepsService'
 // import { profileService } from '../services/ProfileService'
 export default {
   name: 'KeepComponent',
@@ -94,8 +105,7 @@ export default {
       profile: computed(() => AppState.profile),
       vaults: computed(() => AppState.vaults),
       getActiveKeep(keepId) {
-        const index = AppState.keeps.findIndex(k => k.id === keepId)
-        AppState.activeKeep = AppState.keeps[index]
+        keepsService.getActiveKeep(keepId)
         vaultsService.getVaults(AppState.profile.id)
       },
       getOtherProfile(creatorId) {
@@ -104,6 +114,9 @@ export default {
       addToVault(keepId) {
         state.newVaultKeep.KeepId = keepId
         vaultsService.addToVault(state.newVaultKeep)
+      },
+      deleteKeep() {
+        keepsService.deleteKeep(this.keep.id, this.profile.id)
       }
     }
   }
@@ -111,15 +124,23 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.keep {
-  min-width: 150px;
-  min-height: 150px;
+.card {
   border-radius: 10px;
-  background-size: cover;
+  margin: 15px;
+  box-shadow: 10px 10px 24px -12px rgba(0,0,0,0.75);
+  transition: 0.3s;
+}
+.card img {
+  width: 100%;
+  transition: 0.3s;
+  border-radius: 10px;
+}
+.card:hover img {
+  transform: scale(0.8);
 }
 .icon {
-  max-width: 20px;
-  max-height: 20px;
+  max-width: 40px;
+  max-height: 40px;
 }
 
 </style>

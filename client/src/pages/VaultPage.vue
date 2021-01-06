@@ -3,12 +3,14 @@
     <div class="row mt-3">
       <div class="col-12 mt-3 p-3">
         <h1 class="ml-5">{{ vault.name}} </h1>
-        <p class="ml-5">Keeps: </p>
+        <p class="ml-5">Keeps: {{ vaultKeeps.length }}</p>
       </div>
     </div>
     <hr class="w-100">
     <div class="row">
-      <vault-keep-component v-for="vaultKeep in vaultKeeps" :vault-keep-prop="vaultKeep" :key="vaultKeep.id" />
+      <div class="card-columns">
+        <vault-keep-component v-for="vaultKeep in vaultKeeps" :vault-keep-prop="vaultKeep" :key="vaultKeep.id" class="column-container"/>
+      </div>
     </div>
   </div>
 </template>
@@ -39,5 +41,14 @@ export default {
 img {
   max-width: 350px;
   border-radius: 15px;
+}
+.card-columns {
+  width: 100%;
+  column-count: 4;
+}
+@media screen and (max-width: 1000px) {
+  .card-columns {
+    column-count: 2;
+  }
 }
 </style>

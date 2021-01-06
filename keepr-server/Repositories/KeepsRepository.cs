@@ -24,7 +24,9 @@ namespace keepr_server.Repositories
 
         public Keep GetKeepById(int id)
         {
+            string sql = "UPDATE keeps SET views = views + 1 WHERE id = @id";
             Keep selectedKeep = this.GetOne(id);
+            _db.Execute(sql, selectedKeep);
             return selectedKeep;
         }
 

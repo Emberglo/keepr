@@ -28,8 +28,11 @@ class VaultsService {
 
   async deleteVault(vaultId, profileId) {
     try {
-      await api.delete('api/vaults/' + vaultId)
-      this.getVaults(profileId)
+      const conf = confirm('Are you sure?')
+      if (conf === true) {
+        await api.delete('api/vaults/' + vaultId)
+        this.getVaults(profileId)
+      }
     } catch (err) {
       logger.error(err)
     }
@@ -45,8 +48,11 @@ class VaultsService {
   }
 
   async deleteVaultKeep(vaultKeepId, vaultId) {
-    await api.delete('/api/vaultkeeps/' + vaultKeepId)
-    this.getVaultKeeps(vaultId)
+    const conf = confirm('Are you sure ?')
+    if (conf === true) {
+      await api.delete('/api/vaultkeeps/' + vaultKeepId)
+      this.getVaultKeeps(vaultId)
+    }
   }
 }
 

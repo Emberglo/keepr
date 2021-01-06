@@ -1,7 +1,9 @@
 <template>
-  <div class="home container-fluid">
+  <div class="home container">
     <div class="row" v-if="keeps">
-      <keep-component v-for="keep in keeps" :keep-prop="keep" :key="keep.id" class="p-3" />
+      <div class="card-columns">
+        <keep-component v-for="keep in keeps" :keep-prop="keep" :key="keep.id" class="card-container"/>
+      </div>
     </div>
   </div>
 </template>
@@ -28,12 +30,26 @@ export default {
 </script>
 
 <style scoped lang="scss">
-.home{
+.home {
+  margin: 2.5% 0 2.5% 0;
   text-align: center;
   user-select: none;
   > img{
     height: 200px;
     width: 200px;
+  }
+}
+.row {
+  width: 95vw;
+  margin: 0;
+}
+.card-columns {
+  width: 100%;
+  column-count: 4;
+}
+@media screen and (max-width: 1000px) {
+  .card-columns {
+    column-count: 2;
   }
 }
 </style>

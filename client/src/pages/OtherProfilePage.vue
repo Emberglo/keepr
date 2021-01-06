@@ -6,8 +6,8 @@
       </div>
       <div class="col-8 p-3">
         <h1>{{ otherProfile.name }}</h1>
-        <h5>Vaults: {{ otherProfile.vaults }}</h5>
-        <h5>Keeps: {{ otherProfile.keeps }}</h5>
+        <h5>Vaults: {{ otherProfileVaults.length }}</h5>
+        <h5>Keeps: {{ profileKeeps.length }}</h5>
       </div>
     </div>
     <div class="row mt-3 align-items-center">
@@ -20,7 +20,9 @@
       <h2 class="ml-3 p-3">Keeps</h2>
     </div>
     <div class="row">
-      <profile-keep-component v-for="profileKeep in profileKeeps" :profile-keep-prop="profileKeep" :key="profileKeep.id" class="p-3" />
+      <div class="card-columns">
+        <profile-keep-component v-for="profileKeep in profileKeeps" :profile-keep-prop="profileKeep" :key="profileKeep.id" class="card-container" />
+      </div>
     </div>
   </div>
 </template>
@@ -44,7 +46,8 @@ export default {
     return {
       otherProfile: computed(() => AppState.otherProfile),
       vaults: computed(() => AppState.vaults),
-      profileKeeps: computed(() => AppState.profileKeeps)
+      profileKeeps: computed(() => AppState.profileKeeps),
+      otherProfileVaults: computed(() => AppState.vaults.filter(v => v.isPrivate === false))
     }
   }
 }

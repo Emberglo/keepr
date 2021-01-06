@@ -6,8 +6,8 @@
       </div>
       <div class="col-8 p-3">
         <h1>{{ profile.name }}</h1>
-        <h5>Vaults: {{ profile.vaults }}</h5>
-        <h5>Keeps: {{ profile.keeps }}</h5>
+        <h5>Vaults: {{ profileVaults.length }}</h5>
+        <h5>Keeps: {{ profileKeeps.length }}</h5>
       </div>
     </div>
     <div class="row mt-3 align-items-center">
@@ -26,7 +26,10 @@
       <i class="fas fa-plus text-dark" type="button" data-bs-toggle="modal" data-bs-target="#keepsModal"></i>
     </div>
     <div class="row">
-      <profile-keep-component v-for="profileKeep in profileKeeps" :profile-keep-prop="profileKeep" :key="profileKeep.id" class="p-3" />
+      <!-- <profile-keep-component v-for="profileKeep in profileKeeps" :profile-keep-prop="profileKeep" :key="profileKeep.id" class="p-3" /> -->
+      <div class="card-columns">
+        <keep-component v-for="keep in profileKeeps" :keep-prop="keep" :key="keep.id" class="card-container" />
+      </div>
     </div>
 
     <!-- Modal -->
@@ -169,9 +172,11 @@ export default {
     return {
       state,
       profile: computed(() => AppState.profile),
+      keeps: computed(() => AppState.keeps),
       otherProfile: computed(() => AppState.otherProfile),
       vaults: computed(() => AppState.vaults),
       profileKeeps: computed(() => AppState.profileKeeps),
+      profileVaults: computed(() => AppState.vaults.filter(v => v.isPrivate === false)),
       async createVault() {
         await vaultsService.createVault(state.newVault, this.profile.id)
         state.newVault = {}
@@ -192,5 +197,14 @@ img {
 }
 .seeThrough {
   opacity: 0.7;
+}
+.card-columns {
+  width: 100%;
+  column-count: 4;
+}
+@media screen and (max-width: 1000px) {
+  .card-columns {
+    column-count: 2;
+  }
 }
 </style>

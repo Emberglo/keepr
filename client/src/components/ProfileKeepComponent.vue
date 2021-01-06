@@ -1,5 +1,16 @@
 <template>
-  <div class="ProfileKeepComponent col-6 col-sm-3 p-2">
+  <div class="ProfileKeepComponent card">
+    <img class="card-img" :src="profileKeepProp.img" alt="Card image">
+    <div class="card-img-overlay container-fluid d-flex flex-column justify-content-between h-100">
+      <div class="row w-100 justify-content-end">
+        <i type="button" class="fas fa-minus text-danger cursor-pointer" v-if="profile.id == profileKeepProp.creatorId" @click="deleteKeep"></i>
+      </div>
+      <div class="row w-100 justify-content-between">
+        <h5 class="mb-0 cursor-pointer" data-bs-toggle="modal" :data-bs-target="'#keepModal'+keep.id"  @click="getActiveKee (keep.id)">{{ profileKeepProp.name }}</h5>
+        <img :src="profileKeepProp.creator.picture" alt="Profile Image" class="icon rounded-circle p-0 m-0 cursor-pointer" @click="getOtherProfile(profileKeepProp.creatorId)">
+      </div>
+    </div>
+  <!-- <div class="ProfileKeepComponent col-6 col-sm-3 p-2">
     <div class="keep container-fluid p-2 h-100 d-flex flex-column justify-content-between shadow-sm border border-primary" :style="{ backgroundImage: `url(${profileKeepProp.img})` }">
       <div class="row align-self-start justify-content-end w-100">
         <i type="button" class="fas fa-minus text-danger cursor-pointer" v-if="profile.id == profileKeepProp.creatorId" @click="deleteKeep"></i>
@@ -12,7 +23,7 @@
           <img :src="profileKeepProp.creator.picture" alt="Profile Image" class="icon rounded-circle p-0 m-0" @click="getOtherProfile(profileKeepProp.creatorId)">
         </div>
       </div>
-    </div>
+    </div> -->
     <div class="modal fade" :id="'keepModal'+keep.id" tabindex="-1" aria-labelledby="keepModalLabel" aria-hidden="true">
       <div class="modal-dialog modal-xl p-5">
         <div class="modal-content container-fluid p-5">
@@ -79,8 +90,7 @@ export default {
       keep: computed(() => props.profileKeepProp),
       profile: computed(() => AppState.profile),
       getActiveKeep(keepId) {
-        const index = AppState.keeps.findIndex(k => k.id === keepId)
-        AppState.activeKeep = AppState.keeps[index]
+        keepsService.getActiveKeep(keepId)
       },
       getOtherProfile(creatorId) {
         router.push({ name: 'OtherProfilePage', params: { profileId: creatorId } })
@@ -94,11 +104,19 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.keep {
-  min-width: 150px;
-  min-height: 150px;
+.card {
   border-radius: 10px;
-  background-size: cover;
+  margin: 15px;
+  box-shadow: 10px 10px 24px -12px rgba(0,0,0,0.75);
+  transition: 0.3s;
+}
+.card img {
+  width: 100%;
+  transition: 0.3s;
+  border-radius: 10px;
+}
+.card:hover img {
+  transform: scale(0.8);
 }
 .icon {
   max-width: 20px;

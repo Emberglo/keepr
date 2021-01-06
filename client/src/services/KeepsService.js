@@ -14,10 +14,11 @@ class KeepsService {
 
   async getActiveKeep(keepId) {
     try {
-      // const res = await api.get('api/keeps/' + keepId)
-      // AppState.activeKeep = res.data
-      const active = AppState.keeps.findIndex(k => k.id === keepId)
-      AppState.activeKeep = AppState.keeps[active]
+      const res = await api.get('api/keeps/' + keepId)
+      AppState.activeKeep = res.data
+      this.getAllKeeps()
+      // const active = AppState.keeps.findIndex(k => k.id === keepId)
+      // AppState.activeKeep = AppState.keeps[active]
     } catch (err) {
       logger.error('Get Keeps - HAVE YOU STARTED YOUR SERVER YET???', err)
     }
@@ -43,8 +44,11 @@ class KeepsService {
 
   async deleteKeep(keepId, profileId) {
     try {
-      await api.delete('api/keeps/' + keepId)
-      this.getProfileKeeps(profileId)
+      const conf = confirm('Are you sure?')
+      if (conf === true) {
+        await api.delete('api/keeps/' + keepId)
+        this.getProfileKeeps(profileId)
+      }
     } catch (err) {
       logger.error(err)
     }
